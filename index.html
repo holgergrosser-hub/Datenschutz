@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenschutz - Online-Unterweisung | QM-Guru Akademie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://qm-guru-akademie.netlify.app/styles.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #805AD5;
+            --primary-dark: #6B46C1;
+            --primary-light: #D6BCFA;
+            --primary-bg: #FAF5FF;
+        }
+        
+        .category-badge {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .progress-bar {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .progress-track {
+            height: 8px;
+            background: #E2E8F0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .module {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .module.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .highlight-box {
+            background: var(--primary-bg);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+        
+        .highlight-box.warning {
+            background: #FFF5F5;
+            border-left-color: #E53E3E;
+        }
+        
+        .highlight-box.info {
+            background: #EBF8FF;
+            border-left-color: #4299E1;
+        }
+        
+        .highlight-box.success {
+            background: #F0FFF4;
+            border-left-color: #38A169;
+        }
+        
+        .icon-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .icon-list li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+        
+        .icon-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .toc {
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: #F7FAFC;
+            border-radius: 8px;
+        }
+        
+        .toc-number {
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        
+        .quiz-question {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .quiz-question h3 {
+            margin-bottom: 1rem;
+            color: #2D3748;
+        }
+        
+        .quiz-options {
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .quiz-option {
+            padding: 1rem;
+            border: 2px solid #E2E8F0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            border-color: var(--primary-light);
+            background: var(--primary-bg);
+        }
+        
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+        }
+        
+        .quiz-option.correct {
+            border-color: #38A169;
+            background: #F0FFF4;
+        }
+        
+        .quiz-option.incorrect {
+            border-color: #E53E3E;
+            background: #FFF5F5;
+        }
+        
+        .result-container {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .result-score {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .result-passed {
+            color: #38A169;
+        }
+        
+        .result-failed {
+            color: #E53E3E;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #E2E8F0;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn-secondary {
+            background: #E2E8F0;
+            color: #4A5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #CBD5E0;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2D3748;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #E2E8F0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+        
+        .data-item {
+            background: var(--primary-bg);
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .tom-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .tom-item {
+            background: #F7FAFC;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .comparison-box {
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .comparison-box h4 {
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tom-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="category-badge">🔒 Datenschutz</span>
+            <span id="progressText">Modul 1 von 10</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <main class="container" style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+        
+        <!-- Modul 0: Registrierung -->
+        <div class="module active" id="module0">
+            <h1>🔒 Datenschutz</h1>
+            <p class="subtitle">Online-Unterweisung zur DS-GVO (Datenschutz-Grundverordnung)</p>
+            
+            <div class="highlight-box">
+                <h3>📋 Schulungsinhalt</h3>
+                <div class="toc">
+                    <div class="toc-item"><span class="toc-number">1</span> Wo gilt die DS-GVO?</div>
+                    <div class="toc-item"><span class="toc-number">2</span> Anwendbarkeit der DS-GVO</div>
+                    <div class="toc-item"><span class="toc-number">3</span> Personenbezogene Daten</div>
+                    <div class="toc-item"><span class="toc-number">4</span> Besondere Kategorien von Daten</div>
+                    <div class="toc-item"><span class="toc-number">5</span> Was ist Datenverarbeitung?</div>
+                    <div class="toc-item"><span class="toc-number">6</span> Begrifflichkeiten im Überblick</div>
+                    <div class="toc-item"><span class="toc-number">7</span> TOMs – Technische & Organisatorische Maßnahmen</div>
+                    <div class="toc-item"><span class="toc-number">8</span> Datenpannen</div>
+                    <div class="toc-item"><span class="toc-number">9</span> Aufgaben & Verantwortlichkeiten</div>
+                    <div class="toc-item"><span class="toc-number">10</span> Haftung</div>
+                </div>
+            </div>
+            
+            <div class="highlight-box info">
+                <p><strong>⏱️ Dauer:</strong> ca. 20-30 Minuten</p>
+                <p><strong>📝 Abschluss:</strong> 10 Fragen, Bestehen ab 70% (7 richtig)</p>
+                <p><strong>🎓 Zertifikat:</strong> Bei erfolgreichem Abschluss per E-Mail</p>
+            </div>
+            
+            <h3>Ihre Daten für das Zertifikat</h3>
+            <div class="form-group">
+                <label for="vorname">Vorname *</label>
+                <input type="text" id="vorname" required>
+            </div>
+            <div class="form-group">
+                <label for="nachname">Nachname *</label>
+                <input type="text" id="nachname" required>
+            </div>
+            <div class="form-group">
+                <label for="email">E-Mail-Adresse *</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="firma">Firma (optional)</label>
+                <input type="text" id="firma">
+            </div>
+            
+            <button class="btn btn-primary" onclick="startCourse()" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                🚀 Schulung starten
+            </button>
+        </div>
+
+        <!-- Modul 1: Wo gilt die DS-GVO? -->
+        <div class="module" id="module1">
+            <h2>1. Wo gilt die DS-GVO?</h2>
+            
+            <div class="highlight-box">
+                <h3>🌍 Räumlicher Anwendungsbereich</h3>
+                <p>Die <strong>Datenschutz-Grundverordnung (DS-GVO)</strong> ist anwendbar, wenn:</p>
+                <ul class="icon-list">
+                    <li>Die Firma (die die Daten verarbeitet) ihren <strong>Sitz in der EU</strong> hat</li>
+                    <li><strong>Daten von EU-Bürgern</strong> verarbeitet werden (auch von Firmen außerhalb der EU)</li>
+                </ul>
+            </div>
+            
+            <div class="highlight-box info">
+                <h4>💡 Beispiele</h4>
+                <p><strong>DS-GVO gilt:</strong></p>
+                <ul>
+                    <li>Eine deutsche Firma speichert Kundendaten</li>
+                    <li>Eine US-Firma verkauft Produkte in Deutschland und speichert Nutzerdaten</li>
+                    <li>Eine chinesische Firma speichert Daten von EU-Kunden</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>DS-GVO gilt NICHT:</strong></p>
+                <ul>
+                    <li>Eine US-Firma verarbeitet nur Daten von US-Bürgern</li>
+                </ul>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Modul 2: Anwendbarkeit -->
+        <div class="module" id="module2">
+            <h2>2. Anwendbarkeit der DS-GVO</h2>
+            
+            <div class="highlight-box">
+                <h3>💻 Wann gilt die DS-GVO?</h3>
+                <p>Die DS-GVO gilt generell, wenn die <strong>Verarbeitung der Daten computergestützt</strong> ist.</p>
+                <p style="font-size: 1.1rem; margin-top: 1rem; text-align: center;">
+                    <em>Also quasi überall dort, wo Strom fließt.</em>
+                </p>
+            </div>
+            
+            <h3>Aber gilt die DS-GVO auch ohne Computer?</h3>
+            
+            <div class="comparison-grid">
+                <div class="comparison-box" style="background: #F0FFF4; border: 1px solid #9AE6B4;">
+                    <h4 style="color: #276749;">✅ JA, wenn...</h4>
+                    <p>...die Daten in einem <strong>Dateisystem</strong> sind:</p>
+                    <ul>
+                        <li>In einem Ordner</li>
+                        <li>In einem Karteiregister</li>
+                        <li>In einer strukturierten Ablage</li>
+                    </ul>
+                </div>
+                <div class="comparison-box" style="background: #FFF5F5; border: 1px solid #FEB2B2;">
+                    <h4 style="color: #C53030;">❌ NEIN, wenn...</h4>
+                    <p>...die Daten in <strong>keinem Dateisystem</strong> sind:</p>
+                    <ul>
+                        <li>Lose Zettel ohne Struktur</li>
+                        <li>Ungeordnete Notizen</li>
+                        <li>Zufällige Aufzeichnungen</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Modul 3: Personenbezogene Daten -->
+        <div class="module" id="module3">
+            <h2>3. Personenbezogene Daten</h2>
+            
+            <div class="highlight-box">
+                <h3>👤 Definition</h3>
+                <p style="font-size: 1.1rem;">
+                    Beim Datenschutz geht es um <strong>personenbezogene Daten</strong>.
+                </p>
+                <p>Daten sind immer personenbezogen, wenn man damit <strong>eine Person (einen Menschen) identifizieren</strong> kann.</p>
+            </div>
+            
+            <h3>Beispiele für personenbezogene Daten:</h3>
+            
+            <div class="data-grid">
+                <div class="data-item">Vorname, Nachname</div>
+                <div class="data-item">Geburtsdatum</div>
+                <div class="data-item">Alter</div>
+                <div class="data-item">Geschlecht</div>
+                <div class="data-item">Anschrift</div>
+                <div class="data-item">E-Mail-Adresse</div>
+                <div class="data-item">Telefonnummer</div>
+                <div class="data-item">Bankverbindung</div>
+                <div class="data-item">Sozialversicherungsnr.</div>
+                <div class="data-item">Personalausweisnr.</div>
+                <div class="data-item">Standortdaten</div>
+                <div class="data-item">Bilder/Fotos</div>
+                <div class="data-item">Fingerabdruck</div>
+                <div class="data-item">Bestellungen</div>
+                <div class="data-item">Haarfarbe</div>
+                <div class="data-item">Augenfarbe</div>
+            </div>
+            
+            <div class="highlight-box warning">
+                <h4>⚠️ Wichtig: Direkte und indirekte Identifizierung</h4>
+                <p>Es ist egal, ob man eine Person <strong>direkt</strong> oder <strong>indirekt</strong> identifizieren kann!</p>
+                <p><strong>Beispiel:</strong> Wenn jemand sagt "Die blonde Frau aus der Personalabteilung" und dort nur eine blonde Frau arbeitet, ist dies auch ein personenbezogenes Datum → <em>indirekte Identifizierung</em></p>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Modul 4: Besondere Kategorien -->
+        <div class="module" id="module4">
+            <h2>4. Besondere Kategorien personenbezogener Daten</h2>
+            
+            <div class="highlight-box warning">
+                <h3>🛡️ Besonders schützenswerte Daten</h3>
+                <p><strong>Besondere personenbezogene Daten</strong> bedürfen eines <strong>erhöhten Schutzes</strong>!</p>
+            </div>
+            
+            <h3>Dazu gehören Daten über:</h3>
+            
+            <ul class="icon-list">
+                <li><strong>Rassische, ethnische Herkunft</strong></li>
+                <li><strong>Politische Ansichten</strong> (z.B. Parteizugehörigkeit)</li>
+                <li><strong>Religiöse oder philosophische Überzeugungen</strong></li>
+                <li><strong>Gewerkschaftszugehörigkeit</strong></li>
+                <li><strong>Gesundheitsdaten</strong> (z.B. Krankheitstage)</li>
+                <li><strong>Sexuelle Orientierung</strong></li>
+                <li><strong>Genetische Daten</strong></li>
+                <li><strong>Biometrische Daten</strong> (zur Identifizierung)</li>
+            </ul>
+            
+            <div class="highlight-box info">
+                <h4>💡 Beispiele</h4>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid #E2E8F0;"><strong>Besondere Kategorie:</strong></td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid #E2E8F0;"><strong>Keine besondere Kategorie:</strong></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem;">"Frau Mayer war 37 Tage krank"</td>
+                        <td style="padding: 0.5rem;">"Die Frau heißt Michaela Müller"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem;">"Herr Mayer hat die AfD gewählt"</td>
+                        <td style="padding: 0.5rem;">"Die Augen von Frau Schmidt sind braun"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem;">"Mohamad Aslan ist Moslem"</td>
+                        <td style="padding: 0.5rem;">"Die SVN von Frau S. ist 15 070649 C 103"</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Modul 5: Was ist Datenverarbeitung? -->
+        <div class="module" id="module5">
+            <h2>5. Was ist Datenverarbeitung?</h2>
+            
+            <div class="highlight-box">
+                <h3>📊 Der Umgang mit personenbezogenen Daten</h3>
+                <p>Jede Aktion mit personenbezogenen Daten ist eine <strong>Datenverarbeitung</strong>:</p>
+            </div>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                    <span style="background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600;">Erheben</span>
+                    <span style="background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600;">Verarbeiten</span>
+                    <span style="background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600;">Nutzen</span>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <span style="background: #E2E8F0; padding: 0.5rem 1rem; border-radius: 6px;">Speichern</span>
+                    <span style="background: #E2E8F0; padding: 0.5rem 1rem; border-radius: 6px;">Verändern</span>
+                    <span style="background: #E2E8F0; padding: 0.5rem 1rem; border-radius: 6px;">Übermitteln</span>
+                    <span style="background: #E2E8F0; padding: 0.5rem 1rem; border-radius: 6px;">Sperren</span>
+                    <span style="background: #E2E8F0; padding: 0.5rem 1rem; border-radius: 6px;">Löschen</span>
+                </div>
+            </div>
+            
+            <div class="highlight-box info">
+                <h4>💡 Beispiele für Datenverarbeitung:</h4>
+                <ul class="icon-list">
+                    <li>Ein Auditor sieht sich eine Personalakte an</li>
+                    <li>Frau Meier aus der Personalabteilung löscht Daten eines ehemaligen Mitarbeiters</li>
+                    <li>Ein Kundenbetreuer gibt einen neuen Kunden ins System ein</li>
+                    <li>Die Fahrschule schickt Daten eines Fahrschülers an den TÜV</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Keine Datenverarbeitung:</strong></p>
+                <ul>
+                    <li>ITler richtet info@mustermann.de ein (keine personenbezogenen Daten)</li>
+                    <li>Protokoll ohne Personenangaben wird vernichtet</li>
+                </ul>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Modul 6: Begrifflichkeiten -->
+        <div class="module" id="module6">
+            <h2>6. Begrifflichkeiten im Überblick</h2>
+            
+            <div class="highlight-box">
+                <h3>📚 Wichtige Rollen im Datenschutz</h3>
+            </div>
+            
+            <div style="margin: 1.5rem 0;">
+                <div style="background: #F0FFF4; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #38A169;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #276749;">👤 Betroffener</h4>
+                    <p style="margin: 0;">Die Person, deren Daten verarbeitet werden (z.B. Mitarbeiter, Kunden)</p>
+                </div>
+                
+                <div style="background: #EBF8FF; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #4299E1;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #2B6CB0;">🏢 Verantwortlicher</h4>
+                    <p style="margin: 0;">Die Firma/Organisation, die über Zweck und Mittel der Datenverarbeitung entscheidet</p>
+                </div>
+                
+                <div style="background: #FFFAF0; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #ED8936;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #C05621;">🤝 Auftragsverarbeiter</h4>
+                    <p style="margin: 0;">Dienstleister, der im Auftrag des Verantwortlichen Daten verarbeitet (z.B. Lohnbüro, IT-Dienstleister)</p>
+                </div>
+                
+                <div style="background: #F7FAFC; padding: 1.25rem; border-radius: 8px; border-left: 4px solid #718096;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #4A5568;">👥 Dritter</h4>
+                    <p style="margin: 0;">Jede andere Person oder Stelle außerhalb der Datenverarbeitung</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box info">
+                <h4>💡 Beispiel</h4>
+                <p>Die <strong>Firma Müller</strong> beauftragt ein <strong>Lohnbüro</strong> zum Überweisen der Löhne.</p>
+                <ul>
+                    <li><strong>Verantwortlicher:</strong> Firma Müller</li>
+                    <li><strong>Auftragsverarbeiter:</strong> Das Lohnbüro</li>
+                    <li><strong>Betroffene:</strong> Die Mitarbeiter der Firma Müller</li>
+                </ul>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Modul 7: TOMs -->
+        <div class="module" id="module7">
+            <h2>7. TOMs – Technische & Organisatorische Maßnahmen</h2>
+            
+            <div class="highlight-box">
+                <h3>🔐 Was sind TOMs?</h3>
+                <p><strong>T</strong>echnische <strong>O</strong>rganisatorische <strong>M</strong>aßnahmen sind Aktionen, die durchgeführt werden, um <strong>personenbezogene Daten zu schützen</strong>.</p>
+            </div>
+            
+            <h3>Beispiele für TOMs:</h3>
+            
+            <div class="tom-grid">
+                <div class="tom-item">🎥 Kameraüberwachung</div>
+                <div class="tom-item">🔑 Passwortregelung</div>
+                <div class="tom-item">👮 Wachpersonal</div>
+                <div class="tom-item">🚪 Abgeschlossene Bereiche</div>
+                <div class="tom-item">🔒 Passwörter</div>
+                <div class="tom-item">👤 Zugriffsberechtigungen</div>
+                <div class="tom-item">🏠 Home Office Regeln</div>
+                <div class="tom-item">🗝️ Schlüsselregelung</div>
+                <div class="tom-item">🛡️ Firewall</div>
+            </div>
+            
+            <div class="highlight-box info">
+                <h4>❓ Was muss ich über TOMs wissen?</h4>
+                <ul class="icon-list">
+                    <li>Wo stehen die TOMs bei mir im Unternehmen?</li>
+                    <li>Welche TOMs sind für mich relevant?</li>
+                    <li>Muss ich die Tür absperren, wenn ich das Unternehmen verlasse?</li>
+                    <li>Muss ich meinen Laptop zuklappen, wenn ich den Arbeitsplatz verlasse?</li>
+                    <li>Welche Einstellungen MUSS ich an meinem PC vornehmen?</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Daher wichtig:</strong> Informieren Sie sich immer über die aktuell gültigen TOMs in Ihrem Unternehmen!</p>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Modul 8: Datenpanne -->
+        <div class="module" id="module8">
+            <h2>8. Datenpannen</h2>
+            
+            <div class="highlight-box warning">
+                <h3>🚨 Eine Datenpanne ist das Schlimmste, was passieren kann!</h3>
+                <p>Eine Datenpanne liegt vor, wenn personenbezogene Daten <strong>unbefugt offengelegt</strong>, <strong>verändert</strong>, <strong>vernichtet</strong> oder <strong>verloren</strong> wurden.</p>
+            </div>
+            
+            <h3>Beispiele für Datenpannen:</h3>
+            
+            <ul class="icon-list">
+                <li>Mitarbeiter versendet Mailing an alle Kunden und die E-Mail-Adressen stehen im Feld <strong>"AN"</strong> statt "BCC"</li>
+                <li>Mitarbeiter aus der Personalabteilung lässt versehentlich <strong>Personalakten in der Kantine</strong> liegen und ein anderer Mitarbeiter liest diese</li>
+                <li>Ein Mitarbeiter aus der IT löscht versehentlich <strong>alle Kunden aus dem CRM-System</strong></li>
+                <li>In einem Onlineshop sehen Besucher die <strong>Daten vom zuvor eingeloggten Besucher</strong></li>
+                <li>Ein Laptop mit Kundendaten wird <strong>gestohlen</strong></li>
+                <li>Ein USB-Stick mit Personaldaten wird <strong>verloren</strong></li>
+            </ul>
+            
+            <div class="highlight-box" style="background: #FFF5F5; border-color: #E53E3E;">
+                <h4>⚠️ Was tun bei einer Datenpanne?</h4>
+                <ol>
+                    <li><strong>Sofort melden</strong> an den Datenschutzbeauftragten oder die Führungskraft</li>
+                    <li>Dokumentieren, was passiert ist</li>
+                    <li>Meldepflicht an die Aufsichtsbehörde innerhalb von 72 Stunden prüfen</li>
+                </ol>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Modul 9: Aufgaben -->
+        <div class="module" id="module9">
+            <h2>9. Aufgaben & Verantwortlichkeiten</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-box" style="background: #EBF8FF; border: 1px solid #90CDF4;">
+                    <h4 style="color: #2B6CB0;">👔 Aufgaben Führungskräfte</h4>
+                    <ul class="icon-list">
+                        <li>Interne und gesetzliche Regelungen zum Datenschutz einhalten</li>
+                        <li>Die Regeln ggf. kontrollieren</li>
+                        <li>Unterstützung des DSB, ggf. Meldung</li>
+                        <li>Sensibilisierung der Mitarbeiter zum Thema Datenschutz (TOMs unterweisen)</li>
+                    </ul>
+                </div>
+                <div class="comparison-box" style="background: #F0FFF4; border: 1px solid #9AE6B4;">
+                    <h4 style="color: #276749;">👷 Aufgaben Mitarbeiter</h4>
+                    <ul class="icon-list">
+                        <li>Interne und gesetzliche Regelungen zum Datenschutz einhalten</li>
+                        <li>Sorgsamer Umgang mit personenbezogenen Daten</li>
+                        <li>Meldung an Führungskraft oder DSB bei Missbrauch oder Datenpanne</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h4>🎯 Der Datenschutzbeauftragte (DSB)</h4>
+                <p>Der DSB steht <strong>beratend zur Seite</strong> und unterstützt bei allen Fragen zum Datenschutz. Er ist Ansprechpartner für Mitarbeiter, Führungskräfte und Betroffene.</p>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Modul 10: Haftung -->
+        <div class="module" id="module10">
+            <h2>10. Haftung</h2>
+            
+            <div class="highlight-box">
+                <h3>⚖️ Wer haftet bei Datenschutzverstößen?</h3>
+                <ul class="icon-list">
+                    <li>Die <strong>Haftung bleibt beim Geschäftsführer</strong></li>
+                    <li>Der Geschäftsführer trifft Entscheidungen zum Datenschutz</li>
+                    <li>Der Mitarbeiter haftet in seinem <strong>unmittelbaren Verantwortungsbereich</strong></li>
+                    <li>Der Datenschutzbeauftragte steht <strong>beratend</strong> zur Seite</li>
+                </ul>
+            </div>
+            
+            <div class="highlight-box warning">
+                <h3>⚠️ Wichtig!</h3>
+                <p style="font-size: 1.1rem; text-align: center;">
+                    <strong>Jeder im Unternehmen wirkt mit, um den Datenschutz einzuhalten.</strong><br>
+                    <strong>Jeder ist haftbar, wenn er gegen Regelungen verstößt!</strong>
+                </p>
+            </div>
+            
+            <div class="highlight-box success">
+                <h4>✅ Mögliche Konsequenzen bei Verstößen:</h4>
+                <ul>
+                    <li>Bußgelder bis zu <strong>20 Millionen Euro</strong> oder 4% des weltweiten Jahresumsatzes</li>
+                    <li>Schadensersatzansprüche von Betroffenen</li>
+                    <li>Abmahnungen und Kündigungen</li>
+                    <li>Imageschäden für das Unternehmen</li>
+                </ul>
+            </div>
+            
+            <div class="highlight-box" style="text-align: center; background: var(--primary-bg);">
+                <h3>🎓 Geschafft!</h3>
+                <p>Sie haben alle Lernmodule abgeschlossen. Jetzt folgt der <strong>Abschlusstest</strong> mit 10 Fragen.</p>
+                <p>Bestehen ab 70% (7 von 10 richtig)</p>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevModule()">← Zurück</button>
+                <button class="btn btn-primary" onclick="nextModule()">Zum Abschlusstest →</button>
+            </div>
+        </div>
+
+        <!-- Modul 11: Quiz -->
+        <div class="module" id="module11">
+            <h2>📝 Abschlusstest</h2>
+            <p>Beantworten Sie die folgenden 10 Fragen. Sie benötigen mindestens 7 richtige Antworten (70%) zum Bestehen.</p>
+            
+            <div class="quiz-question" data-correct="b">
+                <h3>Frage 1: In welchem Fall ist die DSGVO anwendbar?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Ein Landwirt nur Papierunterlagen hat und alle Dokumente in Ordner heftet</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Eine Firma aus den USA Produkte in Deutschland verkauft und dafür die Nutzerdaten speichert</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Ein US-Unternehmen nur Daten von US-Bürgern verarbeitet</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Notizen auf losen Zetteln ohne Struktur gemacht werden</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question" data-correct="a">
+                <h3>Frage 2: Ist ein Foto einer Person ein personenbezogenes Datum?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Ja</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Nein</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Nur wenn der Name dabei steht</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Nur bei Passfotos</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question" data-correct="a">
+                <h3>Frage 3: Ist die E-Mail-Adresse vorname.nachname@firma.de ein personenbezogenes Datum?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Ja, da die Person identifizierbar ist</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Nein, es ist nur eine E-Mail-Adresse</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Nur wenn sie im CRM-System gespeichert ist</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Nur bei privaten E-Mail-Adressen</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question" data-correct="c">
+                <h3>Frage 4: Welcher Satz enthält eine BESONDERE Kategorie personenbezogener Daten?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Die Frau heißt Michaela Müller</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Die Augen von Frau Schmidt sind braun</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Frau Mayer war dieses Jahr 37 Tage krank</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Die Sozialversicherungsnummer von Frau S. ist 15 070649 C 103</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question" data-correct="b">
+                <h3>Frage 5: Welche Aktion ist KEINE Datenverarbeitung?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Ein Auditor sieht sich eine Personalakte an</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Ein Besprechungsprotokoll ohne Personenangaben wird vernichtet</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Die Fahrschule schickt Daten eines Fahrschülers an den TÜV</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Frau Meier löscht Daten eines ehemaligen Mitarbeiters</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question" data-correct="a">
+                <h3>Frage 6: Sie bewerben sich bei der Firma QM-Dienstleistungen. Wer ist "Verantwortlicher" für Ihre Bewerbungsdaten?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Die Firma QM-Dienstleistungen</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Sie selbst als Bewerber</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Die Arbeitsagentur</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Der Datenschutzbeauftragte</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question" data-correct="c">
+                <h3>Frage 7: Wofür steht die Abkürzung "TOMs"?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Technische Online Management Systeme</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Total Operative Maßnahmen</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Technische Organisatorische Maßnahmen</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Transparente Ordnungs-Methoden</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question" data-correct="d">
+                <h3>Frage 8: Was ist ein Beispiel für eine Datenpanne?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Ein Mitarbeiter ändert seine eigene E-Mail-Signatur</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Ein Kunde wird ordnungsgemäß im System angelegt</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Ein Protokoll ohne Personendaten wird archiviert</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Personalakten werden versehentlich in der Kantine liegen gelassen</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question" data-correct="b">
+                <h3>Frage 9: Wer trägt die Haupthaftung bei Datenschutzverstößen im Unternehmen?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Der Datenschutzbeauftragte</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Der Geschäftsführer</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Die IT-Abteilung</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Die Personalabteilung</div>
+                </div>
+            </div>
+            
+            <div class="quiz-question" data-correct="c">
+                <h3>Frage 10: Was sollten Sie bei einer Datenpanne als erstes tun?</h3>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="a">Abwarten und hoffen, dass es niemand bemerkt</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="b">Die Daten selbst wiederherstellen</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="c">Sofort den Datenschutzbeauftragten oder die Führungskraft informieren</div>
+                    <div class="quiz-option" onclick="selectOption(this)" data-value="d">Die betroffenen Personen direkt anrufen</div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="submitQuiz()" style="width: 100%; padding: 1rem; font-size: 1.1rem; margin-top: 1rem;">
+                ✓ Test auswerten
+            </button>
+        </div>
+
+        <!-- Modul 12: Ergebnis -->
+        <div class="module" id="module12">
+            <div class="result-container">
+                <div id="resultIcon" style="font-size: 5rem;">🎓</div>
+                <h2 id="resultTitle">Ergebnis</h2>
+                <div id="resultScore" class="result-score">0/10</div>
+                <p id="resultText"></p>
+                
+                <div id="resultActions" style="margin-top: 2rem;">
+                    <!-- Buttons werden dynamisch eingefügt -->
+                </div>
+            </div>
+            
+            <div id="quizReview" style="margin-top: 2rem;">
+                <!-- Auswertung wird hier eingefügt -->
+            </div>
+        </div>
+    </main>
+
+    <footer style="text-align: center; padding: 2rem; color: #718096; border-top: 1px solid #E2E8F0; margin-top: 2rem;">
+        <p>© 2025 QM-Dienstleistungen | Holger Grosser | <a href="https://qm-guru.de" style="color: var(--primary);">qm-guru.de</a></p>
+        <p style="font-size: 0.85rem;">Erstellt: QM Elfe · Freigabe: QM Guru</p>
+    </footer>
+
+    <script>
+        let currentModule = 0;
+        let userData = {};
+        let quizAnswers = {};
+        const totalModules = 12;
+        const totalLearningModules = 10;
+
+        function updateProgress() {
+            const progress = currentModule === 0 ? 0 : (currentModule / totalModules) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            if (currentModule === 0) {
+                document.getElementById('progressText').textContent = 'Registrierung';
+            } else if (currentModule <= totalLearningModules) {
+                document.getElementById('progressText').textContent = `Modul ${currentModule} von ${totalLearningModules}`;
+            } else if (currentModule === 11) {
+                document.getElementById('progressText').textContent = 'Abschlusstest';
+            } else {
+                document.getElementById('progressText').textContent = 'Ergebnis';
+            }
+        }
+
+        function showModule(index) {
+            document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+            document.getElementById('module' + index).classList.add('active');
+            currentModule = index;
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function startCourse() {
+            const vorname = document.getElementById('vorname').value.trim();
+            const nachname = document.getElementById('nachname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const firma = document.getElementById('firma').value.trim();
+
+            if (!vorname || !nachname || !email) {
+                alert('Bitte füllen Sie alle Pflichtfelder aus.');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                alert('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+                return;
+            }
+
+            userData = {
+                name: vorname + ' ' + nachname,
+                email: email,
+                firma: firma
+            };
+
+            showModule(1);
+        }
+
+        function nextModule() {
+            if (currentModule < totalModules) {
+                showModule(currentModule + 1);
+            }
+        }
+
+        function prevModule() {
+            if (currentModule > 0) {
+                showModule(currentModule - 1);
+            }
+        }
+
+        function selectOption(element) {
+            const question = element.closest('.quiz-question');
+            question.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            const questionIndex = Array.from(document.querySelectorAll('.quiz-question')).indexOf(question);
+            quizAnswers[questionIndex] = element.dataset.value;
+        }
+
+        function submitQuiz() {
+            const questions = document.querySelectorAll('.quiz-question');
+            let score = 0;
+            let allAnswered = true;
+
+            questions.forEach((q, index) => {
+                if (!quizAnswers[index]) {
+                    allAnswered = false;
+                }
+            });
+
+            if (!allAnswered) {
+                alert('Bitte beantworten Sie alle Fragen.');
+                return;
+            }
+
+            questions.forEach((q, index) => {
+                const correct = q.dataset.correct;
+                const selected = quizAnswers[index];
+                
+                q.querySelectorAll('.quiz-option').forEach(opt => {
+                    if (opt.dataset.value === correct) {
+                        opt.classList.add('correct');
+                    } else if (opt.dataset.value === selected && selected !== correct) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                if (selected === correct) {
+                    score++;
+                }
+            });
+
+            showResult(score, questions.length);
+        }
+
+        function showResult(score, total) {
+            const passed = score >= 7;
+            const percentage = Math.round((score / total) * 100);
+
+            document.getElementById('resultIcon').textContent = passed ? '🎓' : '😔';
+            document.getElementById('resultTitle').textContent = passed ? 'Herzlichen Glückwunsch!' : 'Leider nicht bestanden';
+            document.getElementById('resultScore').textContent = score + '/' + total;
+            document.getElementById('resultScore').className = 'result-score ' + (passed ? 'result-passed' : 'result-failed');
+            document.getElementById('resultText').textContent = passed 
+                ? `Sie haben ${percentage}% erreicht und die Unterweisung erfolgreich abgeschlossen!`
+                : `Sie haben ${percentage}% erreicht. Zum Bestehen sind 70% (7 richtige Antworten) erforderlich.`;
+
+            let actionsHTML = '';
+            if (passed) {
+                actionsHTML = `
+                    <button class="btn btn-primary" onclick="downloadCertificate(${score}, ${total})" style="padding: 1rem 2rem;">
+                        📄 Zertifikat herunterladen
+                    </button>
+                    <p style="margin-top: 1rem; color: #718096;">Das Zertifikat wird auch per E-Mail an ${userData.email} gesendet.</p>
+                `;
+            } else {
+                actionsHTML = `
+                    <button class="btn btn-primary" onclick="retryQuiz()" style="padding: 1rem 2rem; margin-right: 1rem;">
+                        🔄 Test wiederholen
+                    </button>
+                    <button class="btn btn-secondary" onclick="showModule(1)" style="padding: 1rem 2rem;">
+                        📚 Schulung wiederholen
+                    </button>
+                `;
+            }
+            document.getElementById('resultActions').innerHTML = actionsHTML;
+
+            showModule(12);
+
+            if (passed) {
+                sendCertificateRequest(score, total, percentage);
+            }
+        }
+
+        function retryQuiz() {
+            quizAnswers = {};
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            showModule(11);
+        }
+
+        // Zertifikat per Google Apps Script versenden
+        const WEBAPP_URL = 'WEBAPP_URL_HIER_EINTRAGEN';
+
+        function sendCertificateRequest(score, total, percentage) {
+            const data = {
+                name: userData.name,
+                email: userData.email,
+                firma: userData.firma || '',
+                score: score,
+                totalQuestions: total,
+                percentage: percentage,
+                answers: Object.values(quizAnswers),
+                timestamp: new Date().toISOString()
+            };
+
+            if (WEBAPP_URL === 'WEBAPP_URL_HIER_EINTRAGEN') {
+                console.log('WebApp URL nicht konfiguriert. Zertifikat-Daten:', data);
+                return;
+            }
+
+            fetch(WEBAPP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                console.log('Zertifikat-Anfrage gesendet');
+            })
+            .catch(error => {
+                console.error('Fehler beim Senden:', error);
+            });
+        }
+
+        function downloadCertificate(score, total) {
+            alert(`Ihr Zertifikat wird an ${userData.email} gesendet.\n\nName: ${userData.name}\nErgebnis: ${score}/${total} (${Math.round(score/total*100)}%)`);
+        }
+
+        // Initial
+        updateProgress();
+    </script>
+</body>
+</html>
